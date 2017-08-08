@@ -1,0 +1,76 @@
+
+##IMPORTING DATA
+
+### Importing csv file in csv files
+```{r}
+df1 <- read.table("C:\\Users\\user\\Desktop/111.csv",header = TRUE)
+df2 <- read.csv("C:\\Users\\user\\Desktop/111.csv",header = TRUE)
+```
+
+
+### Read a csv comma delimited file
+```{r}
+mydata1=read.table("C:\\Users\\user\\Desktop/111.csv",header = TRUE,sep = ",")
+mydata2= read.csv("C:\\Users\\user\\Desktop/111.csv",header = TRUE)
+mydata3= read.csv("C:\\Users\\user\\Desktop/111.csv",header = TRUE,,sep = ",")
+```
+
+###Opening excel data from folder
+```{r}
+library(readxl)
+mydata=read_excel(file.choose())
+```
+
+
+###Importing Excel Files With The XLConnect Package
+
+```{r}
+library(XLConnect)
+df6 <- readWorksheetFromFile("C:\\Users\\user\\Desktop/111.xlsx",sheet = 1)
+```
+
+###To load a work sheet
+```{r}
+wb <- loadWorkbook("C:\\Users\\user\\Desktop/111.xlsx")
+df7 <- readWorksheet(wb,sheet=1) 
+```
+
+
+###Importing Excel Files With The Readxl Package
+```{r}
+library(readxl)
+df <- read_excel("C:\\Users\\user\\Desktop/111.xlsx")
+```
+
+
+###Importing excel file using gdata package
+```{r}
+library(gdata)                   
+mydata = read.xls("C:\\Users\\user\\Desktop/111.xls")  
+```
+
+
+###Importing using rio package
+```{r}
+library(rio)
+a=import("C:\\Users\\user\\Desktop/111.xlsx")
+```
+
+
+###Import XML Data Into R
+```{r}
+library(XML)
+xmlfile <- xmlTreeParse("C:\\Users\\user\\Desktop/111.xml")
+```
+
+###Importing a web-data using url
+```{r}
+library(httr)
+
+r <- GET("http://httpbin.org/get")
+content(r, "text")
+
+```
+
+
+
