@@ -124,5 +124,6 @@ library(httr)
 r <- GET("http://httpbin.org/get")
 content(r, "text")
 
+###################################
 
 >>>>>>> f0d831e8e9db9e035f6026c0c108ae954dd9e5dd
