@@ -1,0 +1,212 @@
+
+# Importing data
+```{r, echo=FALSE}
+mydata=read.csv("C:\\Users\\user\\Desktop/GData.csv",header=T,sep=",")
+head(mydata)
+variable=c("Total","Goods","Services")
+```
+
+#### Mean,Median,Quartiles
+```{r, echo=FALSE}
+summary(mydata)
+```
+
+
+#### Variance,Std.Dev & Std.Error
+```{r, echo=FALSE}
+variable=c("Total","Goods","Services")
+variance=c(1,2,3)
+std.dev=c(1,2,3)
+std.error=c(1,2,3)
+for(i in 1:3)
+{
+  variance[i]=var(mydata[,i])
+  std.dev[i]=sd(mydata[,i])
+  std.error[i]=std.dev[i]/sqrt(length(mydata[,i]))
+}
+
+data.frame(variable,variance,std.dev,std.error)
+```
+
+#### Covariance matrix
+```{r, echo=FALSE}
+
+cov(mydata)
+
+
+```
+#### Correlation matrix
+```{r, echo=FALSE}
+cor(mydata)
+```
+
+#### Coefficient of Variation
+
+```{r, echo=FALSE}
+coeff_var=c(1,2,3)
+for(i in 1:3)
+{
+coeff_var[i]=sd(mydata[,i])/mean(mydata[,i])*100
+}
+data.frame(cbind(variable,coeff_var))
+```
+
+#### Percentiles for "Goods"
+```{r, echo=FALSE}
+perc=seq(1,100,1)
+for(i in 1:100)
+{
+perc[i]=quantile(mydata[,2],i*0.01)
+}
+perc
+
+
+```
+
+
+### Skewness & Kurtosis for all the variables
+
+```{r, echo=FALSE}
+library(moments)
+skewness=c(1,2,3)
+kurtosis=c(1,2,3)
+for(i in 1:3)
+{
+skewness[i]=round(skewness(mydata[,i]),2)
+kurtosis[i]=round(kurtosis(mydata[,i]),2)
+}
+data.frame(cbind(variable,skewness,kurtosis))
+```
+
+
+# Box plot 
+
+```{r, echo=FALSE}
+names=data.frame(c(names(mydata)))
+par(mfrow=c(1,3))
+for(i in 1:3)
+{
+boxplot(mydata[,i],main=names[i,1],col="gray")
+}
+
+
+```
+
+# Histogram
+```{r, echo=FALSE}
+
+par(mfrow=c(1,3))
+for(i in 1:3)
+{
+hist(mydata[,i],main=variable[i])
+}
+```
+
+# Scatter Plot of "Goods" and "Services"
+
+```{r, echo=FALSE}
+library(car)
+scatterplot(mydata[,2],mydata[,3],main="Scater plot of Goods and Services")
+```
+
+
+# Ogives of Goods
+
+```{r, echo=FALSE}
+a=mydata[,2]
+n=8
+d=seq(1,8,1)
+for(i in 1:8)
+{
+d[i]=sum(ifelse(a>(i-1)*((max(a)-min(a))/n)+min(a) & a<=i*((max(a)-min(a))/n)+min(a),1,0))
+}
+e=cumsum(d)
+plot(e,main="Ogives of Goods")
+lines(e)
+
+```
+
+# combination of histogram, ogives and probability plot
+
+```{r, echo=FALSE}
+h=hist(a,breaks=7, col="gray",freq=T,include.lowest=T,main="Histogram,Ogives & Probability Plot of Goods")
+xfit=seq(min(a),max(a),length=length(a)) 
+yfit=dnorm(xfit,mean=mean(a),sd=sd(a)) 
+yfit=yfit*diff(h$mids[1:2])*length(a) 
+par(new = TRUE)
+lines(xfit, yfit, col="blue", lwd=2,type="l")
+d=seq(1,8,1)
+v=((max(a)-min(a))/8)
+for(i in 1:8)
+{
+d[i]=sum(ifelse(a>(i-1)*v+min(a)-1& a<=i*v+min(a),1,0))
+}
+e=cumsum(d)
+par(new=T)
+plot(e)
+lines(e)
+
+```
+
+# Standardising the variable "Goods"
+```{r, echo=FALSE}
+z=(mydata[,2]-mean(mydata[,2]))/sd(mydata[,2])
+round(z,3)
+```
+
+# Checking Normality of "Goods"
+###Method 1: By Standardising the Variable
+```{r, echo=FALSE}
+
+
+parameter=rbind("mean","std.dev")
+value=c(round(mean(z)),sd(z))
+data.frame(parameter,value)
+
+```
+
+###Method 2: By using Q_Q Plot
+
+```{r, echo=FALSE}
+qqnorm(mydata[,2])
+
+```
+
+
+###Method 3: Normal Probability Plot for "Goods"
+
+```{r, echo=FALSE}
+a=mydata[,2]
+h=hist(a,breaks=7, col="red",freq=T,include.lowest=T,main="Normal Probability plot for Goods")
+xfit=seq(min(a),max(a),length=length(a)) 
+yfit=dnorm(xfit,mean=mean(a),sd=sd(a)) 
+yfit=yfit*diff(h$mids[1:2])*length(a) 
+lines(xfit, yfit, col="blue", lwd=2,type="l")
+
+```
+
+
+###Method 4: Confidence Interval
+
+```{r, echo=FALSE}
+
+e=matrix(nrow=4,ncol=3)
+e[1,]=c("1 sd","2 sd","3 sd")
+for(i in 2:4)
+{
+a=mydata[,i-1]
+for(j in 1:3)
+{
+e[i,j]=round(sum(ifelse(a<mean(a)+ j*sd(a) & a>mean(a)- j*sd(a),1,0))/length(a)*100,2)
+}
+}
+variable=c("type","Total","Goods","Services")
+data.frame(variable,e)
+```
+#Generating random numbers
+
+```{r, echo=FALSE}
+round(runif(100,1,200))
+
+```
+
